@@ -1,0 +1,31 @@
+{
+  "name": "react-native-markdown-view",
+  "version": "0.9.0",
+  "description": "React Native Markdown View",
+  "main": "index.js",
+  "keywords": [
+    "react",
+    "react-native",
+    "markdown",
+    "react-component"
+  ],
+  "author": {
+    "name": "Benjamin Dobell",
+    "email": "contact@glassechidna.com.au"
+  },
+  "homepage": "https://github.com/Benjamin-Dobell/react-native-markdown-view",
+  "bugs": {
+    "url": "https://github.com/Benjamin-Dobell/react-native-markdown-view/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Benjamin-Dobell/react-native-markdown-view.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "simple-markdown": "^0.2.1"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.36.0"
+  }
+}
