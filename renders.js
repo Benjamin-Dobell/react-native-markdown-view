@@ -23,8 +23,18 @@ import type {
   RenderStyles,
 } from './types'
 
+function renderTextBlock(styleName, styleName2) {
+  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
+    <Text key={state.key} style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
+      {'\n'}
+      {typeof node.content === 'string' ? node.content : output(node.content, state)}
+      {'\n'}
+    </Text>
+  )
+}
+
 function renderTextContent(styleName) {
-  return(node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
+  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <Text key={state.key} style={styles[styleName]}>
       {typeof node.content === 'string' ? node.content : output(node.content, state)}
     </Text>
@@ -32,19 +42,17 @@ function renderTextContent(styleName) {
 }
 
 export default Object.freeze({
-  blockQuote: renderTextContent('blockQuote'),
+  blockQuote: renderTextBlock('blockQuote'),
   br: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <Text key={state.key} style={styles['br']}>
       {'\n\n'}
     </Text>
   ),
-  codeBlock: renderTextContent('codeBlock'),
+  codeBlock: renderTextBlock('codeBlock'),
   del: renderTextContent('del'),
   em: renderTextContent('em'),
-  heading: (node: HeadingNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles['heading' + node.level]}>
-      {output(node.content, state)}
-    </Text>
+  heading: (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
+    renderTextBlock('heading', 'heading' + node.level)(node, output, state, styles)
   ),
   hr: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <View key={state.key} style={styles['hr']}/>
