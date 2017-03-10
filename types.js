@@ -63,10 +63,9 @@ export type Node = InlineNode |
 
 // Rules
 
-
 export type RegexComponents = string[]
 export type NestedParseFunction = (string, any) => ?Object
-export type ParseState = any
+export type ParseState = Object
 
 export type ParseFunction = (RegexComponents, NestedParseFunction, ParseState) => any
 
@@ -76,7 +75,7 @@ export type RenderState = Object
 export type RenderStyle = Object
 export type RenderStyles = {[key: NodeKey]: RenderStyle}
 
-export type RenderFunction = (node: Node, output: OutputFunction, state: RenderState, style: RenderStyle) => ?any
+export type RenderFunction = (Node, OutputFunction, RenderState, RenderStyle) => ?any
 
 export type Rule = {match?: RegExp, parse?: ParseFunction, render?: RenderFunction}
 export type Rules = {[key: NodeKey]: Rule}

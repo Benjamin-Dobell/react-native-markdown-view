@@ -77,24 +77,44 @@ MarkdownView.propTypes = {
 
   /**
    * An object overriding or providing additional rules for parsing and rendering Markdown. Keys
-   * are rule/node names (you can define your own, and values are an object of the form:
+   * are rule names (you can define your own, or override existing rules), and values are an object
+   * of the form:
    *
    *   {
    *     match: RegExp,
-   *     parse: (capture, nestedParse, state),
+   *     parse: (match, nestedParse, state),
    *     render: (node, output, state, styles)
    *   }
    *
-   *   match: A Regex to matched against the Markdown string that activates the rule.
-   *   parse: A function that returns an object to parse to the rules' render method.
-   *     capture: Return value of match.exec()
-   *     nestedParse: (string, state) => object, call this to parse nested nodes.
-   *     state: Parser state object, you can attach your own state properties if desirable.
+   * match: A Regex to be executed against the MarkdownView's text.
    *
-   * Default rules are provided with rule names:
+   * parse: A function that returns an AST 'node' object to pass to the rules' render method. If
+   *        the object returned has a 'type' key, rendering will be deferred to the rule matching
+   *        the value of 'type'.
+   *
+   *   match: Return value of match.exec()
+   *   nestedParse: (string, state) => object, call this to parse nested nodes.
+   *   state: Parser state object, you can attach your own state properties if desirable.
+   *
+   * render: A function that returns the rendered node (and its children). Typically you'll return
+   *         a React Native view component.
+   *
+   *   node: An AST node. Please refer to the Flow types in `types.js`.
+   *   output: A function that can be used to render nested/children nodes. Typically you'll want
+   *           call `output(node.children)` and use that as the content of the component you're
+   *           returning.
+   *   state: Renderer state object. You can attach your own state to this object and use it, for
+   *          example, to render nodes differently depending on their parents/ancestors.
+   *   styles: An object containing React Native styles that you can use for rendering components.
+   *
+   * Default rendering rules have keys:
    *
    *   heading, hr, codeBlock, blockQuote, list, table, newline, paragraph, link, image, em,
    *   strong, u, del, inlineCode, br, text
+   *
+   * Default parse-only rules (which defer rendering to another rule) have keys:
+   *
+   *   nptable, lheading, fence, def, escape, autolink, mailto, url, reflink, refimage,
    *
    */
   rules: PropTypes.objectOf(PropTypes.function),
