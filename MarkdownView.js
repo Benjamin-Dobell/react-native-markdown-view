@@ -19,10 +19,6 @@ import type {
   Styles,
 } from './types'
 
-const DefaultRules : Rules = Object.freeze(Object.assign({},
-  ...Object.entries(DefaultRenders).map(([nodeKey, render]) => ({[nodeKey]: {render: render}}))
-))
-
 function simpleMarkdownRule(rule, styles) {
   const {render, ...properties} = rule
   const reactRender = render ? {react: (node, output, state) => render(node, output, state, styles)} : null
@@ -46,6 +42,31 @@ function mergeRules(baseRules, rules) {
   Object.keys(baseRules).forEach(nodeKey => mergedRules[nodeKey] = {...baseRules[nodeKey], ...rules[nodeKey]})
   return mergedRules
 }
+
+const IMAGE_LINK = "(?:\\[[^\\]]*\\]|[^\\]]|\\](?=[^\\[]*\\]))*"
+const IMAGE_HREF_AND_TITLE = "\\s*<?((?:[^\\s\\\\]|\\\\.)*?)>?(?:\\s+['\"]([\\s\\S]*?)['\"])?"
+const IMAGE_SIZE = "(?:\\s+=([0-9]+)x([0-9]+))?\\)\\s*"
+
+const inlineRegex = (regex) => ((source, state) => state.inline ? regex.exec(source) : null)
+
+const DefaultRules : Rules = Object.freeze(mergeRules(
+  Object.assign(
+    {},
+    ...Object.entries(DefaultRenders).map(([nodeKey, render]) => ({[nodeKey]: {render: render}}))
+  ),
+  {
+    image: {
+      match: inlineRegex(new RegExp("^!\\[(" + IMAGE_LINK + ")\\]\\(" + IMAGE_HREF_AND_TITLE + IMAGE_SIZE)),
+      parse: (capture, parse, state) => ({
+        alt: capture[1],
+        target: capture[2].replace(/\\([^0-9A-Za-z\s])/g, '$1'),
+        title: capture[3],
+        width: capture[4] ? parseInt(capture[4]) : undefined,
+        height: capture[5] ? parseInt(capture[5]) : undefined,
+      })
+    }
+  }
+))
 
 class MarkdownView extends Component {
   props: {

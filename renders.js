@@ -64,9 +64,10 @@ export default Object.freeze({
   hr: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <View key={state.key} style={styles['hr']}/>
   ),
-  image: (node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Image key={state.key} style={styles['image']} source={{uri: node.target}}/>
-  ),
+  image: (node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
+    const {width = 320, height = 320} = node
+    return <Image key={state.key} style={[styles['image'], {width, height}]} source={{uri: node.target}}/>
+  },
   inlineCode: renderTextContent('inlineCode'),
   link: renderTextContent('link'),
   // TODO: Implement

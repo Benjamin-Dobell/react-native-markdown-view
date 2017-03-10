@@ -19,6 +19,8 @@ export type ImageNode = {
   alt: string,
   target: string,
   title: string,
+  width?: number,
+  height?: number,
 }
 
 export type InlineContentNode = {
