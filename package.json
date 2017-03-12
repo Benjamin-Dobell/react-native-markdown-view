@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "react-native-tabular-grid": "^1.1.0",
+    "react-native-tabular-grid": "github:Benjamin-Dobell/react-native-tabular-grid",
     "simple-markdown": "^0.2.1"
   },
   "devDependencies": {
