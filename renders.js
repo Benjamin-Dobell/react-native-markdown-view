@@ -48,6 +48,25 @@ function renderTextContent(styleName) {
   )
 }
 
+function paddedSize(size, style) {
+  function either(a, b) {
+    return a === undefined ? b : a
+  }
+
+  const {
+    padding = 0,
+    paddingLeft,
+    paddingRight,
+    paddingTop,
+    paddingBottom,
+  } = style
+
+  return {
+    width: size.width + either(paddingLeft, padding) + either(paddingRight, padding),
+    height: size.height + either(paddingTop, padding) + either(paddingBottom, padding)
+  }
+}
+
 export default Object.freeze({
   blockQuote: renderTextBlock('blockQuote'),
   br: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
@@ -65,8 +84,12 @@ export default Object.freeze({
     <View key={state.key} style={styles['hr']}/>
   ),
   image: (node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
-    const {width = 320, height = 320} = node
-    return <Image key={state.key} style={[styles['image'], {width, height}]} source={{uri: node.target}}/>
+    const {imageWrapper: wrapperStyle, image: imageStyle} = styles
+    return (
+      <View key={state.key} style={node.width && node.height ? [wrapperStyle, paddedSize(node, wrapperStyle)] : wrapperStyle}>
+        <Image source={{uri: node.target}} style={imageStyle}/>
+      </View>
+    )
   },
   inlineCode: renderTextContent('inlineCode'),
   link: renderTextContent('link'),

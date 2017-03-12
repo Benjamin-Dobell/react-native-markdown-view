@@ -62,8 +62,13 @@ export default Object.freeze({
     backgroundColor: '#ccc',
     height: 1,
   },
+  imageWrapper: {
+    padding: 4,
+    width: 320,
+    height: 320,
+  },
   image: {
-    margin: 12,
+    flexGrow: 1,
   },
   inlineCode: {
     backgroundColor: 'rgba(128, 128, 128, 0.5)',
