@@ -78,7 +78,24 @@ export default Object.freeze({
   link: {
     color: '#0366d6',
   },
-  list: {},
+  list: {
+    margin: 8,
+  },
+  listItem: {
+    flexDirection: 'row',
+  },
+  listItemNumber: {
+    minWidth: 32,
+    paddingRight: 4,
+  },
+  listItemBullet: {
+    minWidth: 32,
+    paddingRight: 4,
+  },
+  listItemOrderedContent: {
+  },
+  listItemUnorderedContent: {
+  },
   paragraph: {
     marginTop: 10,
     marginBottom: 10,

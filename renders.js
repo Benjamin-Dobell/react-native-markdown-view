@@ -70,7 +70,7 @@ function paddedSize(size, style) {
 export default Object.freeze({
   blockQuote: renderTextBlock('blockQuote'),
   br: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles['br']}>
+    <Text key={state.key} style={styles.br}>
       {'\n\n'}
     </Text>
   ),
@@ -81,7 +81,7 @@ export default Object.freeze({
     renderTextBlock('heading', 'heading' + node.level)(node, output, state, styles)
   ),
   hr: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <View key={state.key} style={styles['hr']}/>
+    <View key={state.key} style={styles.hr}/>
   ),
   image: (node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
     const {imageWrapper: wrapperStyle, image: imageStyle} = styles
@@ -95,10 +95,26 @@ export default Object.freeze({
   link: renderTextContent('link'),
   // TODO: Implement
   list: (node: ListNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    null
+    <View key={state.key} style={styles.list}>
+      {node.items.map((item, i) => (
+        <View key={i} style={styles.listItem}>
+          {
+            node.ordered ?
+              <Text style={styles.listItemNumber}>{`${i + 1}.`}</Text>
+              :
+              <Text style={styles.listItemBullet}>
+                {styles.listItemBullet && styles.listItemBullet.content ? styles.listItemBullet.content : '\u2022'}
+              </Text>
+          }
+          <Text style={node.ordered ? styles.listItemOrderedContent : styles.listItemUnorderedContent}>
+            {output(item, state)}
+          </Text>
+        </View>
+      ))}
+    </View>
   ),
   newline: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles['newline']}>
+    <Text key={state.key} style={styles.newline}>
       {'\n'}
     </Text>
   ),
