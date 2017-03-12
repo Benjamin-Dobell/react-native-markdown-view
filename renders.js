@@ -8,6 +8,12 @@ import {
   View,
 } from 'react-native'
 
+import {
+  Cell,
+  Grid,
+  Row,
+} from 'react-native-tabular-grid'
+
 import type {
   CodeBlockNode,
   EmptyNode,
@@ -46,6 +52,46 @@ function renderTextContent(styleName) {
       {typeof node.content === 'string' ? node.content : output(node.content, state)}
     </Text>
   )
+}
+
+function renderTableCell(cell, row, column, rowCount, columnCount, output, state, styles) {
+  const cellStyle = [styles.tableCell]
+  const contentStyle = [styles.tableCellContent]
+
+  if (row % 2 == 0) {
+    cellStyle.push(styles.tableCellEvenRow)
+    contentStyle.push(styles.tableCellContentEvenRow)
+  } else {
+    cellStyle.push(styles.tableCellOddRow)
+    contentStyle.push(styles.tableCellContentOddRow)
+  }
+
+  if (column % 2 == 0) {
+    cellStyle.push(styles.tableCellEvenColumn)
+    contentStyle.push(styles.tableCellContentEvenColumn)
+  } else {
+    cellStyle.push(styles.tableCellOddColumn)
+    contentStyle.push(styles.tableCellContentOddColumn)
+  }
+
+  if (row == 1) {
+    cellStyle.push(styles.tableHeaderCell)
+    contentStyle.push(styles.tableHeaderCellContent)
+  } else if (row == rowCount) {
+    cellStyle.push(styles.tableCellLastRow)
+    contentStyle.push(styles.tableCellContentLastRow)
+  }
+
+  if (column == columnCount) {
+    cellStyle.push(styles.tableCellLastColumn)
+    contentStyle.push(styles.tableCellContentLastColumn)
+  }
+
+  return <Cell rowId={row} id={column} key={column} style={cellStyle}>
+    <Text style={contentStyle}>
+      {output(cell, state)}
+    </Text>
+  </Cell>
 }
 
 function paddedSize(size, style) {
@@ -93,7 +139,6 @@ export default Object.freeze({
   },
   inlineCode: renderTextContent('inlineCode'),
   link: renderTextContent('link'),
-  // TODO: Implement
   list: (node: ListNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <View key={state.key} style={styles.list}>
       {node.items.map((item, i) => (
@@ -120,9 +165,16 @@ export default Object.freeze({
   ),
   paragraph: renderTextContent('paragraph'),
   strong: renderTextContent('strong'),
-  // TODO: Implement
   table: (node: TableNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    null
+    <Grid key={state.key} style={styles.table}>
+      {[<Row id={1} key={1}>
+        {node.header.map((cell, column) => renderTableCell(cell, 1, column + 1, node.cells.length + 1, node.header.length, output, state, styles))}
+      </Row>].concat(node.cells.map((cells, row) => (
+        <Row id={row + 2} key={row + 2}>
+          {cells.map((cell, column) => renderTableCell(cell, row + 2, column + 1, node.cells.length + 1, cells.length, output, state, styles))}
+        </Row>
+      )))}
+    </Grid>
   ),
   text: renderTextContent('text'),
   u: renderTextContent('u')

@@ -103,7 +103,38 @@ export default Object.freeze({
   strong: {
     fontWeight: '700',
   },
-  table: {},
+  table: {
+    margin: 4,
+    borderColor: '#222',
+  },
+  tableHeaderCell: {
+    borderColor: '#222',
+  },
+  tableHeaderCellContent: {
+    fontWeight: '700',
+  },
+  tableCell: {
+    padding: 5,
+  },
+  tableCellOddRow: {
+    backgroundColor: 'rgba(128, 128, 128, 0.1)',
+  },
+  tableCellEvenRow: {},
+  tableCellLastRow: {
+    borderBottomWidth: 0,
+  },
+  tableCellOddColumn: {},
+  tableCellEvenColumn: {},
+  tableCellLastColumn: {
+    borderRightWidth: 0,
+  },
+  tableCellContent: {},
+  tableCellContentOddRow: {},
+  tableCellContentEvenRow: {},
+  tableCellContentLastRow: {},
+  tableCellContentOddColumn: {},
+  tableCellContentEvenColumn: {},
+  tableCellContentLastColumn: {},
   u: {
     textDecorationLine: 'underline',
   },

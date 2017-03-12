@@ -23,6 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "react-native-tabular-grid": "^1.1.0",
     "simple-markdown": "^0.2.1"
   },
   "devDependencies": {
