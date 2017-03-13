@@ -71,9 +71,9 @@ export default Object.freeze({
     flexGrow: 1,
   },
   inlineCode: {
-    backgroundColor: 'rgba(128, 128, 128, 0.5)',
+    backgroundColor: 'rgba(128, 128, 128, 0.25)',
     fontFamily: 'Courier',
-    fontWeight: '600',
+    fontWeight: '500',
   },
   link: {
     color: '#0366d6',
