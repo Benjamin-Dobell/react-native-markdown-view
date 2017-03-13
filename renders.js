@@ -19,6 +19,7 @@ import type {
   HeadingNode,
   ImageNode,
   InlineContentNode,
+  LinkNode,
   ListNode,
   TableNode,
   OutputFunction,
@@ -135,7 +136,12 @@ export default Object.freeze({
     )
   },
   inlineCode: renderTextContent('inlineCode'),
-  link: renderTextContent('link'),
+  link: (node: LinkNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
+    const onPress = state.onLinkPress
+    return <Text key={state.key} style={styles.link} onPress={onPress ? () => onPress(node.target) : null}>
+      {typeof node.content === 'string' ? node.content : output(node.content, state)}
+    </Text>
+  },
   list: (node: ListNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <View key={state.key} style={styles.list}>
       {node.items.map((item, i) => (

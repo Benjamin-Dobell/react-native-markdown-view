@@ -30,7 +30,7 @@ export type InlineContentNode = {
 export type LinkNode = {
   content: Node,
   target: string,
-  title: string,
+  title?: ?string,
 }
 
 export type ListNode = {
@@ -72,8 +72,11 @@ export type ParseState = Object
 export type ParseFunction = (RegexComponents, NestedParseFunction, ParseState) => any
 
 export type NodeKey = string
-export type OutputFunction = (node: Node, state: Object) => ?any
-export type RenderState = Object
+export type OutputFunction = (Node, Object) => ?any
+export type RenderState = {
+  key: string,
+  onLinkPress: ?(string) => void
+}
 export type RenderStyle = Object
 export type RenderStyles = {[key: NodeKey]: RenderStyle}
 

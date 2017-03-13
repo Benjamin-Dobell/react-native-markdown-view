@@ -8,7 +8,7 @@ Compared to the current alternative Markdown components available for React Nati
 
 * Minimalistic React Native specific API i.e. Doesn't expose unnecessary cruft from `simple-markdown`.
 * Rendering correctness e.g. Tables cells align correctly thanks to [react-native-tabular-grid](https://github.com/Benjamin-Dobell/react-native-tabular-grid)
-* Avoid pulling in unnecessary dependencies e.g. `lodash` simply for `merge`/`map`.
+* Avoiding unnecessary dependencies e.g. No using `lodash` simply for `merge`/`map`.
 * Best effort default styling e.g. Use of translucent grey backgrounds should work well in either light or dark themed apps.
 * Simple customisability/extensibility i.e. Support for providing your own styles and rules.
 * Is written using modern ES6/7 React Native syntax.
@@ -126,3 +126,8 @@ e.g.
   }
 }
 ```
+
+## onLinkPress
+
+Callback function for when a link is pressed. The callback receives the URL of the link as a
+string (first and only argument).

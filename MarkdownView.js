@@ -15,6 +15,7 @@ import DefaultRenders from './renders'
 import DefaultStyles from './styles'
 
 import type {
+  ImageNode,
   Rules,
   Styles,
 } from './types'
@@ -48,6 +49,7 @@ const IMAGE_HREF_AND_TITLE = "\\s*<?((?:[^\\s\\\\]|\\\\.)*?)>?(?:\\s+['\"]([\\s\
 const IMAGE_SIZE = "(?:\\s+=([0-9]+)x([0-9]+))?\\)\\s*"
 
 const inlineRegex = (regex) => ((source, state) => state.inline ? regex.exec(source) : null)
+const unescapeUrl = (url) => url.replace(/\\([^0-9A-Za-z\s])/g, '$1')
 
 const DefaultRules : Rules = Object.freeze(mergeRules(
   Object.assign(
@@ -57,9 +59,9 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
   {
     image: {
       match: inlineRegex(new RegExp("^!\\[(" + IMAGE_LINK + ")\\]\\(" + IMAGE_HREF_AND_TITLE + IMAGE_SIZE)),
-      parse: (capture, parse, state) => ({
+      parse: (capture, parse, state): ImageNode => ({
         alt: capture[1],
-        target: capture[2].replace(/\\([^0-9A-Za-z\s])/g, '$1'),
+        target: unescapeUrl(capture[2]),
         title: capture[3],
         width: capture[4] ? parseInt(capture[4]) : undefined,
         height: capture[5] ? parseInt(capture[5]) : undefined,
@@ -72,12 +74,13 @@ class MarkdownView extends Component {
   props: {
     style?: Object,
     rules?: Rules,
+    onLinkPress?: (string) => void,
     styles?: Styles,
     children: string,
   }
 
   render() {
-    const {rules = {}, styles = {}} = this.props
+    const {rules = {}, styles = {}, onLinkPress} = this.props
 
     const mergedStyles = mergeStyles(DefaultStyles, styles)
     const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles))
@@ -86,10 +89,11 @@ class MarkdownView extends Component {
 
     const ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {inline: false})
     const render = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(mergedRules, 'react'))
+    const initialRenderState = {onLinkPress: onLinkPress}
 
     return (
       <View style={this.props.style}>
-        {render(ast)}
+        {render(ast, initialRenderState)}
       </View>
     )
   }
@@ -149,6 +153,12 @@ MarkdownView.propTypes = {
    * precedence.
    */
   styles: PropTypes.objectOf(PropTypes.object),
+
+  /**
+   * Callback function for when a link is pressed. The callback receives the URL of the link as a
+   * string (first and only argument).
+   */
+  onLinkPress: PropTypes.func,
 }
 
 export default MarkdownView
