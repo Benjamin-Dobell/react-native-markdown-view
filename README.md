@@ -1,6 +1,6 @@
 # react-native-markdown-view
 
-[![npm version](https://badge.fury.io/js/react-native-markdown-view.svg)](https://badge.fury.io/js/react-native-markdown-view)
+![npm version](https://img.shields.io/npm/v/react-native-markdown-view.svg)
 
 A straight-forward React Native component for rendering Markdown as native views.
 
