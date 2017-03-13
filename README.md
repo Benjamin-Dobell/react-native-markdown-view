@@ -1,12 +1,16 @@
 # react-native-markdown-view
 
-This library provides a simple React Native wrapper around, and set of default rules for [simple-markdown](https://github.com/Khan/simple-markdown).
+[![npm version](https://badge.fury.io/js/react-native-markdown-view.svg)](https://badge.fury.io/js/react-native-markdown-view)
+
+A straight-forward React Native component for rendering Markdown as native views.
+
+This library is backed by [simple-markdown](https://github.com/Khan/simple-markdown).
 
 ## Library Goals
 
 Compared to the current alternative Markdown components available for React Native this library has a strong focus on the following:
 
-* Minimalistic React Native specific API i.e. Doesn't expose unnecessary cruft from `simple-markdown`.
+* Minimalistic React Native specific API i.e. Doesn't expose unnecessary details of `simple-markdown`.
 * Rendering correctness e.g. Tables cells align correctly thanks to [react-native-tabular-grid](https://github.com/Benjamin-Dobell/react-native-tabular-grid)
 * Avoiding unnecessary dependencies e.g. No using `lodash` simply for `merge`/`map`.
 * Best effort default styling e.g. Use of translucent grey backgrounds should work well in either light or dark themed apps.
