@@ -15,15 +15,12 @@ import {
 } from 'react-native-tabular-grid'
 
 import type {
-  CodeBlockNode,
   EmptyNode,
   HeadingNode,
   ImageNode,
   InlineContentNode,
-  LinkNode,
   ListNode,
   TableNode,
-  TextNode,
   OutputFunction,
   RenderState,
   RenderStyles,
@@ -123,7 +120,7 @@ export default Object.freeze({
   codeBlock: renderTextBlock('codeBlock'),
   del: renderTextContent('del'),
   em: renderTextContent('em'),
-  heading: (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
+  heading: (node: HeadingNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     renderTextBlock('heading', 'heading' + node.level)(node, output, state, styles)
   ),
   hr: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
