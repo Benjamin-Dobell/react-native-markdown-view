@@ -93,8 +93,10 @@ export default Object.freeze({
     paddingRight: 4,
   },
   listItemOrderedContent: {
+    flex: 1,
   },
   listItemUnorderedContent: {
+    flex: 1,
   },
   paragraph: {
     marginTop: 10,
