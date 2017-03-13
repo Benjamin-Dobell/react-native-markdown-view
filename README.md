@@ -73,13 +73,17 @@ of the form:
 
 ```
   {
-    match: RegExp,
-    parse: (match, nestedParse, state),
-    render: (node, output, state, styles)
+    match: (source, state, lookbehind) => RegExp,
+    parse: (match, nestedParse, state) => Node
+    render: (node, output, state, styles) => Component
   }
 ```
 
-`match`: A Regex to be executed against the MarkdownView's text.
+`match`: A function returning a RegExp to be executed against the MarkdownView's content.
+
+* `source`: Upcoming content of MarkdownView. i.e. A string beginning at the current position of parsing (`source[0]` is the next character).
+* `state`: Matcher state object, you can attach your own state properties if desirable.
+* `lookbehind`: The string most recently captured at this parsing level, to allow for look-behind parsing.
 
 `parse`: A function that returns an AST 'node' object to pass to the rules' render method. If
        the object returned has a 'type' key, rendering will be deferred to the rule matching
