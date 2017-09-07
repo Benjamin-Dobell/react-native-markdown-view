@@ -25,7 +25,7 @@
   "dependencies": {
     "prop-types": "^15.5.10",
     "react-native-tabular-grid": "github:Benjamin-Dobell/react-native-tabular-grid",
-    "simple-markdown": "^0.2.1"
+    "simple-markdown": "0.3.x"
   },
   "devDependencies": {
     "flow-bin": "^0.36.0"

@@ -45,7 +45,7 @@ function mergeRules(baseRules, rules) {
   return mergedRules
 }
 
-const IMAGE_LINK = "(?:\\[[^\\]]*\\]|[^\\]]|\\](?=[^\\[]*\\]))*"
+const IMAGE_LINK = "(?:\\[[^\\]]*\\]|[^\\[\\]]|\\](?=[^\\[]*\\]))*";
 const IMAGE_HREF_AND_TITLE = "\\s*<?((?:[^\\s\\\\]|\\\\.)*?)>?(?:\\s+['\"]([\\s\\S]*?)['\"])?"
 const IMAGE_SIZE = "(?:\\s+=([0-9]+)x([0-9]+))?\\)\\s*"
 
@@ -58,6 +58,9 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
     ...Object.entries(DefaultRenders).map(([nodeKey, render]) => ({[nodeKey]: {render: render}}))
   ),
   {
+    heading: {
+      match: SimpleMarkdown.blockRegex(/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n *)*\n/),
+    },
     image: {
       match: inlineRegex(new RegExp("^!\\[(" + IMAGE_LINK + ")\\]\\(" + IMAGE_HREF_AND_TITLE + IMAGE_SIZE)),
       parse: (capture, parse, state): ImageNode => ({
