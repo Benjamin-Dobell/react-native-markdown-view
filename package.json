@@ -1,6 +1,6 @@
 {
   "name": "react-native-markdown-view",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "React Native Markdown View",
   "main": "index.js",
   "keywords": [
@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.5.10",
-    "react-native-tabular-grid": "github:Benjamin-Dobell/react-native-tabular-grid",
+    "react-native-tabular-grid-markdown-view": "0.1.x",
     "simple-markdown": "0.3.x"
   },
   "devDependencies": {
