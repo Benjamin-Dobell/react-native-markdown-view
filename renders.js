@@ -12,7 +12,7 @@ import {
   Cell,
   Grid,
   Row,
-} from 'react-native-tabular-grid'
+} from 'react-native-tabular-grid-markdown-view'
 
 import type {
   EmptyNode,
