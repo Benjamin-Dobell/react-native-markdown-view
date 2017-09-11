@@ -27,11 +27,6 @@ import type {
   RenderStyles,
 } from './types'
 
-const blockWrapStyle = Object.freeze({
-  lineHeight: 0,
-  includeFontPadding: false,
-})
-
 function renderImage(node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) {
   const {imageWrapper: wrapperStyle, image: imageStyle} = styles
   return (
@@ -97,11 +92,9 @@ function paragraphRenderer() {
 function textBlockRenderer(styleName, styleName2) {
   return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <Text key={state.key}>
-      <Text style={blockWrapStyle}>{'\n'}</Text>
       <Text style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
         {typeof node.content === 'string' ? node.content : output(node.content, state)}
       </Text>
-      <Text style={blockWrapStyle}>{'\n'}</Text>
     </Text>
   )
 }
