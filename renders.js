@@ -32,23 +32,12 @@ const blockWrapStyle = Object.freeze({
   includeFontPadding: false,
 })
 
-function renderTextBlock(styleName, styleName2) {
-  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key}>
-      <Text style={blockWrapStyle}>{'\n'}</Text>
-      <Text style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
-        {typeof node.content === 'string' ? node.content : output(node.content, state)}
-      </Text>
-      <Text style={blockWrapStyle}>{'\n'}</Text>
-    </Text>
-  )
-}
-
-function renderTextContent(styleName) {
-  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles[styleName]}>
-      {typeof node.content === 'string' ? node.content : output(node.content, state)}
-    </Text>
+function renderImage(node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) {
+  const {imageWrapper: wrapperStyle, image: imageStyle} = styles
+  return (
+    <View key={state.key} style={node.width && node.height ? [wrapperStyle, paddedSize(node, wrapperStyle)] : wrapperStyle}>
+      <Image source={{uri: node.target}} style={imageStyle}/>
+    </View>
   )
 }
 
@@ -92,6 +81,39 @@ function renderTableCell(cell, row, column, rowCount, columnCount, output, state
   </Cell>
 }
 
+function paragraphRenderer() {
+  var renderText = textContentRenderer('paragraph')
+
+  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
+    if (node.content instanceof Array && node.content.length === 1 && node.content[0].type === 'image') {
+      const imageNode : ImageNode = node.content[0]
+      return renderImage(imageNode, output, state, styles)
+    } else {
+      return renderText(node, output, state, styles)
+    }
+  }
+}
+
+function textBlockRenderer(styleName, styleName2) {
+  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
+    <Text key={state.key}>
+      <Text style={blockWrapStyle}>{'\n'}</Text>
+      <Text style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
+        {typeof node.content === 'string' ? node.content : output(node.content, state)}
+      </Text>
+      <Text style={blockWrapStyle}>{'\n'}</Text>
+    </Text>
+  )
+}
+
+function textContentRenderer(styleName) {
+  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
+    <Text key={state.key} style={styles[styleName]}>
+      {typeof node.content === 'string' ? node.content : output(node.content, state)}
+    </Text>
+  )
+}
+
 function paddedSize(size, style) {
   function either(a, b) {
     return a === undefined ? b : a
@@ -112,30 +134,23 @@ function paddedSize(size, style) {
 }
 
 export default Object.freeze({
-  blockQuote: renderTextBlock('blockQuote'),
+  blockQuote: textBlockRenderer('blockQuote'),
   br: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <Text key={state.key} style={styles.br}>
       {'\n\n'}
     </Text>
   ),
-  codeBlock: renderTextBlock('codeBlock'),
-  del: renderTextContent('del'),
-  em: renderTextContent('em'),
+  codeBlock: textBlockRenderer('codeBlock'),
+  del: textContentRenderer('del'),
+  em: textContentRenderer('em'),
   heading: (node: HeadingNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    renderTextBlock('heading', 'heading' + node.level)(node, output, state, styles)
+    textBlockRenderer('heading', 'heading' + node.level)(node, output, state, styles)
   ),
   hr: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <View key={state.key} style={styles.hr}/>
   ),
-  image: (node: ImageNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
-    const {imageWrapper: wrapperStyle, image: imageStyle} = styles
-    return (
-      <View key={state.key} style={node.width && node.height ? [wrapperStyle, paddedSize(node, wrapperStyle)] : wrapperStyle}>
-        <Image source={{uri: node.target}} style={imageStyle}/>
-      </View>
-    )
-  },
-  inlineCode: renderTextContent('inlineCode'),
+  image: renderImage,
+  inlineCode: textContentRenderer('inlineCode'),
   link: (node: LinkNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
     const onPress = state.onLinkPress
     return <Text key={state.key} style={styles.link} onPress={onPress ? () => onPress(node.target) : null}>
@@ -166,8 +181,8 @@ export default Object.freeze({
       {'\n'}
     </Text>
   ),
-  paragraph: renderTextContent('paragraph'),
-  strong: renderTextContent('strong'),
+  paragraph: paragraphRenderer(),
+  strong: textContentRenderer('strong'),
   table: (node: TableNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <Grid key={state.key} style={styles.table}>
       {[<Row id={1} key={1}>
@@ -179,6 +194,6 @@ export default Object.freeze({
       )))}
     </Grid>
   ),
-  text: renderTextContent('text'),
-  u: renderTextContent('u')
+  text: textContentRenderer('text'),
+  u: textContentRenderer('u')
 })
