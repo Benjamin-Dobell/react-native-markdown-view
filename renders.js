@@ -89,19 +89,9 @@ function paragraphRenderer() {
   }
 }
 
-function textBlockRenderer(styleName, styleName2) {
+function textContentRenderer(styleName, styleName2) {
   return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key}>
-      <Text style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
-        {typeof node.content === 'string' ? node.content : output(node.content, state)}
-      </Text>
-    </Text>
-  )
-}
-
-function textContentRenderer(styleName) {
-  return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles[styleName]}>
+    <Text key={state.key} style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
       {typeof node.content === 'string' ? node.content : output(node.content, state)}
     </Text>
   )
@@ -127,17 +117,17 @@ function paddedSize(size, style) {
 }
 
 export default Object.freeze({
-  blockQuote: textBlockRenderer('blockQuote'),
+  blockQuote: textContentRenderer('blockQuote'),
   br: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <Text key={state.key} style={styles.br}>
       {'\n\n'}
     </Text>
   ),
-  codeBlock: textBlockRenderer('codeBlock'),
+  codeBlock: textContentRenderer('codeBlock'),
   del: textContentRenderer('del'),
   em: textContentRenderer('em'),
   heading: (node: HeadingNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    textBlockRenderer('heading', 'heading' + node.level)(node, output, state, styles)
+    textContentRenderer('heading', 'heading' + node.level)(node, output, state, styles)
   ),
   hr: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
     <View key={state.key} style={styles.hr}/>
