@@ -43,7 +43,7 @@ In your `Component`'s `render()` method you can then render markdown via JSX e.g
   {'\n'}
   **React Native** is even better with Markdown!{'\n'}
   {'\n'}
-  ![RN Logo](https://facebook.github.io/react/img/logo_og.png =120x63){'\n'}
+  ![RN Logo](https://reactjs.org/logo-og.png =120x63){'\n'}
   {'\n'}
   `react-native-markdown-view` is:{'\n'}
   {'\n'}
