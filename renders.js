@@ -149,7 +149,7 @@ export default Object.freeze({
               <Text style={styles.listItemNumber}>{`${i + 1}.`}</Text>
               :
               <Text style={styles.listItemBullet}>
-                {styles.listItemBullet && styles.listItemBullet.content ? styles.listItemBullet.content : '\u2022'}
+                {styles.listItemBulletType && styles.listItemBulletType.content ? styles.listItemBulletType.content : '\u2022'}
               </Text>
           }
           <Text style={node.ordered ? styles.listItemOrderedContent : styles.listItemUnorderedContent}>
