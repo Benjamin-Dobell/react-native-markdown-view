@@ -148,7 +148,7 @@ MarkdownView.propTypes = {
    *   nptable, lheading, fence, def, escape, autolink, mailto, url, reflink, refimage,
    *
    */
-  rules: PropTypes.objectOf(PropTypes.objectOf(PropTypes.func)),
+  rules: PropTypes.objectOf(PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.number]))),
 
   /**
    * An object providing styles to be passed to a corresponding rule render method. Keys are
