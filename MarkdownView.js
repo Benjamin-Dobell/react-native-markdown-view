@@ -156,7 +156,7 @@ MarkdownView.propTypes = {
    * default style exists, they will me merged, with style properties defined here taking
    * precedence.
    */
-  styles: PropTypes.objectOf(PropTypes.object),
+  styles: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.number])),
 
   /**
    * Callback function for when a link is pressed. The callback receives the URL of the link as a
