@@ -8,6 +8,7 @@ import React, {
 
 import {
   View,
+  ViewPropTypes,
 } from 'react-native'
 
 import SimpleMarkdown from 'simple-markdown'
@@ -104,7 +105,7 @@ class MarkdownView extends Component {
 }
 
 MarkdownView.propTypes = {
-  ...View.propTypes,
+  ...ViewPropTypes,
 
   /**
    * An object overriding or providing additional rules for parsing and rendering Markdown. Keys
