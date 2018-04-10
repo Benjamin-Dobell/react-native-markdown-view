@@ -17,6 +17,7 @@
   "bugs": {
     "url": "https://github.com/Benjamin-Dobell/react-native-markdown-view/issues"
   },
+  "types": "./index.d.ts",
   "repository": {
     "type": "git",
     "url": "git://github.com/Benjamin-Dobell/react-native-markdown-view.git"
