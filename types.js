@@ -82,7 +82,7 @@ export type RenderStyles = {[key: NodeKey]: RenderStyle}
 
 export type RenderFunction = (Node, OutputFunction, RenderState, RenderStyle) => ?any
 
-export type Rule = {match?: (string, RenderState, string[]) => ?RegExp, parse?: ParseFunction, render?: RenderFunction}
+export type Rule = {order?: number, match?: (string, RenderState, string[]) => ?RegExp, parse?: ParseFunction, render?: RenderFunction}
 export type Rules = {[key: NodeKey]: Rule}
 
 // Styles
