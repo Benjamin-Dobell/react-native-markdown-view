@@ -139,3 +139,23 @@ e.g.
 
 Callback function for when a link is pressed. The callback receives the URL of the link as a
 string (first and only argument).
+
+Here's an example using `Linking` from `react-native` to open link in default browser app:
+
+### Import
+```js
+import { Linking } from 'react-native'
+```
+
+### Usage
+```jsx
+<MarkdownView
+  onLinkPress={(url) => {
+    Linking.openURL(url).catch(error =>
+      console.warn('An error occurred: ', error),
+    )
+  }}
+>
+Check out: [react-native-markdown-view](https://github.com/Benjamin-Dobell/react-native-markdown-view/)
+</MarkdownView>
+```
