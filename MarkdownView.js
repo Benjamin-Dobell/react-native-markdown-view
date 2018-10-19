@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 
 import {
+  Text,
   View,
 } from 'react-native'
 
@@ -81,10 +82,11 @@ class MarkdownView extends Component {
     onLinkPress?: (string) => void,
     styles?: Styles,
     children: string,
+    textProps?: Object,
   }
 
   render() {
-    const {rules = {}, styles = {}, onLinkPress} = this.props
+    const {rules = {}, styles = {}, onLinkPress, textProps = {}} = this.props
 
     const mergedStyles = mergeStyles(DefaultStyles, styles)
     const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles))
@@ -93,7 +95,7 @@ class MarkdownView extends Component {
 
     const ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {inline: false})
     const render = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(mergedRules, 'react'))
-    const initialRenderState = {onLinkPress: onLinkPress}
+    const initialRenderState = {onLinkPress: onLinkPress, textProps: textProps}
 
     return (
       <View style={this.props.style}>
@@ -163,6 +165,11 @@ MarkdownView.propTypes = {
    * string (first and only argument).
    */
   onLinkPress: PropTypes.func,
+
+  /**
+   * Props passed to all <Text/> components. See https://facebook.github.io/react-native/docs/text#props
+   */
+  textProps: PropTypes.object,
 }
 
 export default MarkdownView
