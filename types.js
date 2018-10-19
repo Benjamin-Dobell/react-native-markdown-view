@@ -75,7 +75,8 @@ export type NodeKey = string
 export type OutputFunction = (Node, Object) => ?any
 export type RenderState = {
   key: string,
-  onLinkPress: ?(string) => void
+  onLinkPress: ?(string) => void,
+  textProps: Object,
 }
 export type RenderStyle = Object
 export type RenderStyles = {[key: NodeKey]: RenderStyle}

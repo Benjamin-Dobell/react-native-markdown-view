@@ -135,7 +135,11 @@ e.g.
 }
 ```
 
-## onLinkPress
+### onLinkPress
 
 Callback function for when a link is pressed. The callback receives the URL of the link as a
 string (first and only argument).
+
+### textProps
+
+Props passed to all `<Text/>` components. See https://facebook.github.io/react-native/docs/text#props
