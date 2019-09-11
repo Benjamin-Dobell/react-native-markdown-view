@@ -70,7 +70,7 @@ function renderTableCell(cell, row, column, rowCount, columnCount, output, state
   }
 
   return <Cell rowId={row} id={column} key={column} style={cellStyle}>
-    <Text style={contentStyle}>
+    <Text textBreakStrategy="simple" style={contentStyle}>
       {output(cell, state)}
     </Text>
   </Cell>
@@ -91,7 +91,7 @@ function paragraphRenderer() {
 
 function textContentRenderer(styleName, styleName2) {
   return (node: InlineContentNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
+    <Text textBreakStrategy="simple" key={state.key} style={styleName2 ? [styles[styleName], styles[styleName2]] : styles[styleName]}>
       {typeof node.content === 'string' ? node.content : output(node.content, state)}
     </Text>
   )
@@ -119,7 +119,7 @@ function paddedSize(size, style) {
 export default Object.freeze({
   blockQuote: textContentRenderer('blockQuote'),
   br: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles.br}>
+    <Text textBreakStrategy="simple" key={state.key} style={styles.br}>
       {'\n\n'}
     </Text>
   ),
@@ -136,7 +136,7 @@ export default Object.freeze({
   inlineCode: textContentRenderer('inlineCode'),
   link: (node: LinkNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => {
     const onPress = state.onLinkPress
-    return <Text key={state.key} style={styles.link} onPress={onPress ? () => onPress(node.target) : null}>
+    return <Text textBreakStrategy="simple" key={state.key} style={styles.link} onPress={onPress ? () => onPress(node.target) : null}>
       {typeof node.content === 'string' ? node.content : output(node.content, state)}
     </Text>
   },
@@ -146,13 +146,13 @@ export default Object.freeze({
         <View key={i} style={styles.listItem}>
           {
             node.ordered ?
-              <Text style={styles.listItemNumber}>{`${i + 1}.`}</Text>
+              <Text textBreakStrategy="simple" style={styles.listItemNumber}>{`${i + 1}.`}</Text>
               :
-              <Text style={styles.listItemBullet}>
+              <Text textBreakStrategy="simple" style={styles.listItemBullet}>
                 {styles.listItemBullet && styles.listItemBullet.content ? styles.listItemBullet.content : '\u2022'}
               </Text>
           }
-          <Text style={node.ordered ? styles.listItemOrderedContent : styles.listItemUnorderedContent}>
+          <Text textBreakStrategy="simple" style={node.ordered ? styles.listItemOrderedContent : styles.listItemUnorderedContent}>
             {output(item, state)}
           </Text>
         </View>
@@ -160,7 +160,7 @@ export default Object.freeze({
     </View>
   ),
   newline: (node: EmptyNode, output: OutputFunction, state: RenderState, styles: RenderStyles) => (
-    <Text key={state.key} style={styles.newline}>
+    <Text textBreakStrategy="simple" key={state.key} style={styles.newline}>
       {'\n'}
     </Text>
   ),
