@@ -26,7 +26,7 @@
   "dependencies": {
     "prop-types": "^15.5.10",
     "react-native-tabular-grid-markdown-view": "0.1.x",
-    "simple-markdown": "0.3.x"
+    "simple-markdown": "0.6.x"
   },
   "devDependencies": {
     "flow-bin": "^0.36.0"
