@@ -59,7 +59,7 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
   ),
   {
     heading: {
-      match: SimpleMarkdown.blockRegex(/^ *(#{1,6}) *([^\n]+?) *#* *(?:\n *)*\n/),
+      match: SimpleMarkdown.blockRegex(/^ *(#{1,6}) +([^\n]+?) *#* *(?:\n *)*\n/),
     },
     image: {
       match: inlineRegex(new RegExp("^!\\[(" + IMAGE_LINK + ")\\]\\(" + IMAGE_HREF_AND_TITLE + IMAGE_SIZE)),
