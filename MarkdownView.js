@@ -1,53 +1,48 @@
 /* @flow */
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import React, { Component } from "react";
+import React, {
+  Component,
+} from 'react'
 
-import { View } from "react-native";
+import {
+  View,
+} from 'react-native'
 
-import SimpleMarkdown from "simple-markdown";
+import SimpleMarkdown from 'simple-markdown'
 
-import DefaultRenders from "./renders";
-import DefaultStyles from "./styles";
+import DefaultRenders from './renders'
+import DefaultStyles from './styles'
 
-import type { ImageNode, Rules, Styles } from "./types";
+import type {
+  ImageNode,
+  Rules,
+  Styles,
+} from './types'
 
 function simpleMarkdownRule(rule, styles) {
-  const { render, ...properties } = rule;
-  const reactRender = render
-    ? { react: (node, output, state) => render(node, output, state, styles) }
-    : null;
-  return { ...properties, ...reactRender };
+  const {render, ...properties} = rule
+  const reactRender = render ? {react: (node, output, state) => render(node, output, state, styles)} : null
+  return {...properties, ...reactRender}
 }
 
 function simpleMarkdownRules(rules, styles) {
-  const markdownRules = {};
-  Object.keys(rules).forEach(
-    nodeKey =>
-      (markdownRules[nodeKey] = simpleMarkdownRule(rules[nodeKey], styles))
-  );
-  return markdownRules;
+  const markdownRules = {}
+  Object.keys(rules).forEach(nodeKey => markdownRules[nodeKey] = simpleMarkdownRule(rules[nodeKey], styles))
+  return markdownRules
 }
 
 function mergeStyles(baseStyles, styles) {
-  const mergedStyles = { ...styles };
-  Object.keys(baseStyles).forEach(
-    nodeKey =>
-      (mergedStyles[nodeKey] = styles[nodeKey]
-        ? [baseStyles[nodeKey], styles[nodeKey]]
-        : baseStyles[nodeKey])
-  );
-  return mergedStyles;
+  const mergedStyles = {...styles}
+  Object.keys(baseStyles).forEach(nodeKey => mergedStyles[nodeKey] = styles[nodeKey] ? [baseStyles[nodeKey], styles[nodeKey]] : baseStyles[nodeKey])
+  return mergedStyles
 }
 
 function mergeRules(baseRules, rules) {
-  const mergedRules = { ...rules };
-  Object.keys(baseRules).forEach(
-    nodeKey =>
-      (mergedRules[nodeKey] = { ...baseRules[nodeKey], ...rules[nodeKey] })
-  );
-  return mergedRules;
+  const mergedRules = {...rules}
+  Object.keys(baseRules).forEach(nodeKey => mergedRules[nodeKey] = {...baseRules[nodeKey], ...rules[nodeKey]})
+  return mergedRules
 }
 
 const IMAGE_LINK = "(?:\\[[^\\]]*\\]|[^\\[\\]]|\\](?=[^\\[]*\\]))*";
@@ -64,7 +59,7 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
   ),
   {
     heading: {
-      match: SimpleMarkdown.blockRegex(/^ *(#{1,6})\s *([^\n]+?) *#* *(?:\n *)*\n/),
+      match: SimpleMarkdown.blockRegex(/^ *(#{1,6}) +([^\n]+?) *#* *(?:\n *)*\n/),
     },
     image: {
       match: inlineRegex(new RegExp("^!\\[(" + IMAGE_LINK + ")\\]\\(" + IMAGE_HREF_AND_TITLE + IMAGE_SIZE)),
@@ -76,43 +71,35 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
         height: capture[5] ? parseInt(capture[5]) : undefined,
       })
     }
-  )
-);
+  }
+))
 
 class MarkdownView extends Component {
   props: {
     style?: Object,
     rules?: Rules,
-    onLinkPress?: string => void,
+    onLinkPress?: (string) => void,
     styles?: Styles,
-    children: string
-  };
+    children: string,
+  }
 
   render() {
-    const { rules = {}, styles = {}, onLinkPress } = this.props;
+    const {rules = {}, styles = {}, onLinkPress} = this.props
 
-    const mergedStyles = mergeStyles(DefaultStyles, styles);
-    const mergedRules = mergeRules(
-      SimpleMarkdown.defaultRules,
-      simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles)
-    );
+    const mergedStyles = mergeStyles(DefaultStyles, styles)
+    const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles))
 
-    const markdown =
-      (Array.isArray(this.props.children)
-        ? this.props.children.join("")
-        : this.props.children) + "\n\n";
+    const markdown = (Array.isArray(this.props.children) ? this.props.children.join('') : this.props.children) + '\n\n'
 
-    const ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {
-      inline: false
-    });
-    const render = SimpleMarkdown.reactFor(
-      SimpleMarkdown.ruleOutput(mergedRules, "react")
-    );
-    const initialRenderState = { onLinkPress: onLinkPress };
+    const ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {inline: false})
+    const render = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(mergedRules, 'react'))
+    const initialRenderState = {onLinkPress: onLinkPress}
 
     return (
-      <View style={this.props.style}>{render(ast, initialRenderState)}</View>
-    );
+      <View style={this.props.style}>
+        {render(ast, initialRenderState)}
+      </View>
+    )
   }
 }
 
@@ -161,9 +148,7 @@ MarkdownView.propTypes = {
    *   nptable, lheading, fence, def, escape, autolink, mailto, url, reflink, refimage,
    *
    */
-  rules: PropTypes.objectOf(
-    PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.number]))
-  ),
+  rules: PropTypes.objectOf(PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.number]))),
 
   /**
    * An object providing styles to be passed to a corresponding rule render method. Keys are
@@ -171,15 +156,13 @@ MarkdownView.propTypes = {
    * default style exists, they will me merged, with style properties defined here taking
    * precedence.
    */
-  styles: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.object, PropTypes.number])
-  ),
+  styles: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.number])),
 
   /**
    * Callback function for when a link is pressed. The callback receives the URL of the link as a
    * string (first and only argument).
    */
-  onLinkPress: PropTypes.func
-};
+  onLinkPress: PropTypes.func,
+}
 
-export default MarkdownView;
+export default MarkdownView
