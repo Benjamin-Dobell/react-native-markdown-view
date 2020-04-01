@@ -147,6 +147,10 @@ Here's an example using `Linking` from `react-native` to open link in default br
 import { Linking } from 'react-native'
 ```
 
+## changeParsingResult
+
+Callback function for changing the parsing result.
+
 ### Usage
 ```jsx
 <MarkdownView
