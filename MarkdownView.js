@@ -1,25 +1,15 @@
 /* @flow */
 
-import PropTypes from 'prop-types';
+import React, {memo, useMemo} from 'react'
 
-import React, {
-  Component,
-} from 'react'
-
-import {
-  View,
-} from 'react-native'
+import {View} from 'react-native'
 
 import SimpleMarkdown from 'simple-markdown'
 
 import DefaultRenders from './renders'
 import DefaultStyles from './styles'
 
-import type {
-  ImageNode,
-  Rules,
-  Styles,
-} from './types'
+import type {ImageNode, Rules, Styles} from './types'
 
 function simpleMarkdownRule(rule, styles) {
   const {render, ...properties} = rule
@@ -74,95 +64,37 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
   }
 ))
 
-class MarkdownView extends Component {
-  props: {
-    style?: Object,
-    rules?: Rules,
-    onLinkPress?: (string) => void,
-    styles?: Styles,
-    children: string,
-  }
+const emptyObject = {};
 
-  render() {
-    const {rules = {}, styles = {}, onLinkPress} = this.props
+const MarkdownView = ({style, rules = emptyObject, onLinkPress, changeParsingResult, styles = emptyObject, children}: {
+  style?: Object,
+  rules?: Rules,
+  onLinkPress?: (string) => void,
+  changeParsingResult?: (any) => any,
+  styles?: Styles,
+  children: string,
+}) => {
+  const content = useMemo(() => {
+    const mergedStyles = mergeStyles(DefaultStyles, styles);
+    const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles));
 
-    const mergedStyles = mergeStyles(DefaultStyles, styles)
-    const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles))
+    const markdown = (Array.isArray(children) ? children.join('') : children) + '\n\n'
 
-    const markdown = (Array.isArray(this.props.children) ? this.props.children.join('') : this.props.children) + '\n\n'
-
-    const ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {inline: false})
+    let ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {inline: false})
+    if(changeParsingResult) {
+      ast = changeParsingResult(ast);
+    }
     const render = SimpleMarkdown.reactFor(SimpleMarkdown.ruleOutput(mergedRules, 'react'))
-    const initialRenderState = {onLinkPress: onLinkPress}
+    const initialRenderState = {onLinkPress: onLinkPress};
 
-    return (
-      <View style={this.props.style}>
-        {render(ast, initialRenderState)}
-      </View>
-    )
-  }
+    return render(ast, initialRenderState);
+  }, [styles, rules, onLinkPress, children, changeParsingResult]);
+
+  return (
+    <View style={style}>
+      {content}
+    </View>
+  )
 }
 
-MarkdownView.propTypes = {
-  ...View.propTypes,
-
-  /**
-   * An object overriding or providing additional rules for parsing and rendering Markdown. Keys
-   * are rule names (you can define your own, or override existing rules), and values are an object
-   * of the form:
-   *
-   *   {
-   *     match: RegExp,
-   *     parse: (match, nestedParse, state),
-   *     render: (node, output, state, styles)
-   *   }
-   *
-   * match: A Regex to be executed against the MarkdownView's text.
-   *
-   * parse: A function that returns an AST 'node' object to pass to the rules' render method. If
-   *        the object returned has a 'type' key, rendering will be deferred to the rule matching
-   *        the value of 'type'.
-   *
-   *   match: Return value of match.exec()
-   *   nestedParse: (string, state) => object, call this to parse nested nodes.
-   *   state: Parser state object, you can attach your own state properties if desirable.
-   *
-   * render: A function that returns the rendered node (and its children). Typically you'll return
-   *         a React Native view component.
-   *
-   *   node: An AST node. Please refer to the Flow types in `types.js`.
-   *   output: A function that can be used to render nested/children nodes. Typically you'll want
-   *           call `output(node.children)` and use that as the content of the component you're
-   *           returning.
-   *   state: Renderer state object. You can attach your own state to this object and use it, for
-   *          example, to render nodes differently depending on their parents/ancestors.
-   *   styles: An object containing React Native styles that you can use for rendering components.
-   *
-   * Default rendering rules have keys:
-   *
-   *   heading, hr, codeBlock, blockQuote, list, table, newline, paragraph, link, image, em,
-   *   strong, u, del, inlineCode, br, text
-   *
-   * Default parse-only rules (which defer rendering to another rule) have keys:
-   *
-   *   nptable, lheading, fence, def, escape, autolink, mailto, url, reflink, refimage,
-   *
-   */
-  rules: PropTypes.objectOf(PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.number]))),
-
-  /**
-   * An object providing styles to be passed to a corresponding rule render method. Keys are
-   * rule/node names and values are React Native style objects. If a style is defined here and a
-   * default style exists, they will me merged, with style properties defined here taking
-   * precedence.
-   */
-  styles: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.number])),
-
-  /**
-   * Callback function for when a link is pressed. The callback receives the URL of the link as a
-   * string (first and only argument).
-   */
-  onLinkPress: PropTypes.func,
-}
-
-export default MarkdownView
+export default memo(MarkdownView);
