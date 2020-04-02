@@ -78,7 +78,7 @@ const MarkdownView = ({style, rules = emptyObject, onLinkPress, changeParsingRes
     const mergedStyles = mergeStyles(DefaultStyles, styles);
     const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles));
 
-    const markdown = (Array.isArray(this.props.children) ? this.props.children.join('') : this.props.children) + '\n\n'
+    const markdown = (Array.isArray(children) ? children.join('') : children) + '\n\n'
 
     let ast = SimpleMarkdown.parserFor(mergedRules)(markdown, {inline: false})
     if(changeParsingResult) {
