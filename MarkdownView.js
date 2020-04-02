@@ -64,7 +64,9 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
   }
 ))
 
-const MarkdownView = ({style, rules, onLinkPress, changeParsingResult, styles, children}: {
+const emptyObject = {};
+
+const MarkdownView = ({style, rules = emptyObject, onLinkPress, changeParsingResult, styles = emptyObject, children}: {
   style?: Object,
   rules?: Rules,
   onLinkPress?: (string) => void,
