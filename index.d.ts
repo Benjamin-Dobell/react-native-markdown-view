@@ -22,7 +22,7 @@ declare module "react-native-markdown-view" {
         link?: TextStyle;
         list?: ViewStyle;
         listItem?: ViewStyle;
-        listItemNumber?: ViewStyle;
+        listItemNumber?: TextStyle;
         listItemBullet?: TextStyle;
         listItemOrderedContent?: TextStyle;
         listItemUnorderedContent?: TextStyle;
