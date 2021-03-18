@@ -81,12 +81,13 @@ class MarkdownView extends Component {
     onLinkPress?: (string) => void,
     styles?: Styles,
     children: string,
+    replaceAllDefaultStyles?: boolean,
   }
 
   render() {
-    const {rules = {}, styles = {}, onLinkPress} = this.props
+    const {rules = {}, styles = {}, onLinkPress, replaceAllDefaultStyles = false} = this.props
 
-    const mergedStyles = mergeStyles(DefaultStyles, styles)
+    const mergedStyles = replaceAllDefaultStyles ? styles : mergeStyles(DefaultStyles, styles)
     const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles))
 
     const markdown = (Array.isArray(this.props.children) ? this.props.children.join('') : this.props.children) + '\n\n'
@@ -157,6 +158,11 @@ MarkdownView.propTypes = {
    * precedence.
    */
   styles: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.number])),
+
+  /**
+   * A boolean indicating if all default styles should be overridden by the given styles property.
+   */
+  replaceAllDefaultStyles: PropTypes.bool,
 
   /**
    * Callback function for when a link is pressed. The callback receives the URL of the link as a

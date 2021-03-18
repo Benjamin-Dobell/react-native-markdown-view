@@ -135,7 +135,12 @@ e.g.
 }
 ```
 
-## onLinkPress
+### replaceAllDefaultStyles (default to false)
+
+A boolean indicating if all default styles should be overridden by the given styles property.
+
+
+### onLinkPress
 
 Callback function for when a link is pressed. The callback receives the URL of the link as a
 string (first and only argument).
