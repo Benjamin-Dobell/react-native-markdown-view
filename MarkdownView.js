@@ -2,8 +2,6 @@
 
 import React, {memo, useMemo} from 'react'
 
-import {View} from 'react-native'
-
 import SimpleMarkdown from 'simple-markdown'
 
 import DefaultRenders from './renders'
@@ -66,15 +64,14 @@ const DefaultRules : Rules = Object.freeze(mergeRules(
 
 const emptyObject = {};
 
-const MarkdownView = ({style, rules = emptyObject, onLinkPress, changeParsingResult, styles = emptyObject, children}: {
-  style?: Object,
+const MarkdownView = ({rules = emptyObject, onLinkPress, changeParsingResult, styles = emptyObject, children}: {
   rules?: Rules,
   onLinkPress?: (string) => void,
   changeParsingResult?: (any) => any,
   styles?: Styles,
   children: string,
 }) => {
-  const content = useMemo(() => {
+  return useMemo(() => {
     const mergedStyles = mergeStyles(DefaultStyles, styles);
     const mergedRules = mergeRules(SimpleMarkdown.defaultRules, simpleMarkdownRules(mergeRules(DefaultRules, rules), mergedStyles));
 
@@ -89,12 +86,6 @@ const MarkdownView = ({style, rules = emptyObject, onLinkPress, changeParsingRes
 
     return render(ast, initialRenderState);
   }, [styles, rules, onLinkPress, children, changeParsingResult]);
-
-  return (
-    <View style={style}>
-      {content}
-    </View>
-  )
 }
 
 export default memo(MarkdownView);
