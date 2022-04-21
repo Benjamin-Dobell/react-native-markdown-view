@@ -34,8 +34,7 @@ function simpleMarkdownRules(rules, styles) {
 }
 
 function mergeStyles(baseStyles, styles) {
-  const mergedStyles = {...styles}
-  Object.keys(baseStyles).forEach(nodeKey => mergedStyles[nodeKey] = styles[nodeKey] ? [baseStyles[nodeKey], styles[nodeKey]] : baseStyles[nodeKey])
+  const mergedStyles = {...DefaultStyles,...styles}
   return mergedStyles
 }
 
